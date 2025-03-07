@@ -1,0 +1,9 @@
+(library
+ (name ppx_format)
+ (public_name ppx_format)
+ (preprocess
+  (pps ppxlib.metaquot))
+ (kind ppx_rewriter)
+ (libraries ppxlib))
+
+(ocamllex lexer)

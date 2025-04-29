@@ -29,7 +29,7 @@ let parse ~loc str : expression list =
         | `Unterminated_interpolation ->
             "unterminated interpolation"
         | `Unknown_format_specifier fmt ->
-            (Printf.sprintf "unknown format specifier %s" fmt)
+            Printf.sprintf "unknown format specifier %s" fmt
       in
       [ Ast_builder.Default.pexp_extension ~loc
           (let loc = {loc_start; loc_end; loc_ghost= false} in
@@ -59,18 +59,23 @@ let traverse =
             parse ~loc:locpayload payload |> List.map (fun e -> (Nolabel, e))
           in
           Ast_builder.Default.pexp_apply ~loc func args
-      | [%expr
-          [%e? func]
-            [%e? arg]
-            [%i
-              [%e?
-                { pexp_desc=
-                    Pexp_constant (Pconst_string (payload, locpayload, _))
-                ; _ }]]] ->
+      | { pexp_desc=
+            Pexp_apply
+              ( func
+              , [ arg
+                ; ( Nolabel
+                  , [%expr
+                      [%i
+                        [%e?
+                          { pexp_desc=
+                              Pexp_constant
+                                (Pconst_string (payload, locpayload, _))
+                          ; _ }]]] ) ] )
+        ; _ } ->
           let loc = func.pexp_loc in
           let args =
-            arg :: parse ~loc:locpayload payload
-            |> List.map (fun e -> (Nolabel, e))
+            arg
+            :: List.map (fun e -> (Nolabel, e)) (parse ~loc:locpayload payload)
           in
           Ast_builder.Default.pexp_apply ~loc func args
       | _ ->

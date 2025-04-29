@@ -8,7 +8,7 @@ license: "MIT"
 homepage: "https://github.com/EmileTrotignon/ppx_format"
 bug-reports: "https://github.com/EmileTrotignon/ppx_format/issues"
 depends: [
-  "ocaml" {>= "4.8.0"}
+  "ocaml" {>= "4.08"}
   "dune" {>= "3.14"}
   "ppxlib"
   "ocamllex"

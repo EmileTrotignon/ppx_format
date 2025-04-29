@@ -1,2 +1,3 @@
 (cram
-(deps (package ppx_format)))
+ (deps
+  (package ppx_format)))

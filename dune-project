@@ -19,7 +19,7 @@
  (description "String interpolation, but compatible with format strings")
  (depends
   (ocaml
-   (>= 4.8.0))
+   (>= 4.08))
   dune
   ppxlib
   ocamllex))

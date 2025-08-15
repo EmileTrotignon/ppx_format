@@ -11,7 +11,6 @@ depends: [
   "ocaml" {>= "4.08"}
   "dune" {>= "3.14"}
   "ppxlib"
-  "ocamllex"
   "odoc" {with-doc}
 ]
 build: [

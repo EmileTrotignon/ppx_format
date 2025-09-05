@@ -47,37 +47,24 @@ let traverse =
     method! expression e =
       let e = super#expression e in
       match e with
-      | [%expr
-          [%e? func]
-            [%i
-              [%e?
-                { pexp_desc=
-                    Pexp_constant (Pconst_string (payload, locpayload, _))
-                ; _ }]]] ->
-          let loc = func.pexp_loc in
-          let args =
-            parse ~loc:locpayload payload |> List.map (fun e -> (Nolabel, e))
-          in
-          Ast_builder.Default.pexp_apply ~loc func args
-      | { pexp_desc=
-            Pexp_apply
-              ( func
-              , [ arg
-                ; ( Nolabel
-                  , [%expr
-                      [%i
-                        [%e?
-                          { pexp_desc=
-                              Pexp_constant
-                                (Pconst_string (payload, locpayload, _))
-                          ; _ }]]] ) ] )
-        ; _ } ->
-          let loc = func.pexp_loc in
-          let args =
-            arg
-            :: List.map (fun e -> (Nolabel, e)) (parse ~loc:locpayload payload)
-          in
-          Ast_builder.Default.pexp_apply ~loc func args
+      | {pexp_desc= Pexp_apply (func, args); _} -> (
+        match List.rev args with
+        | ( Nolabel
+          , [%expr
+              [%i
+                [%e?
+                  { pexp_desc=
+                      Pexp_constant (Pconst_string (payload, locpayload, _))
+                  ; _ }]]] )
+          :: rev_args ->
+            let loc = func.pexp_loc in
+            let args =
+              List.rev rev_args
+              @ List.map (fun e -> (Nolabel, e)) (parse ~loc:locpayload payload)
+            in
+            Ast_builder.Default.pexp_apply ~loc func args
+        | _ ->
+            e )
       | _ ->
           e
   end

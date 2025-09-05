@@ -16,4 +16,6 @@ let () = Printf.fprintf stdout {%i|Hello, World {%s s} {%d x} !{%c '\n'}%!|}
 let fprintf_label ~ch =
   Printf.fprintf ch
 
-let () = fprintf_label ~ch:stdout {%i|Hello, World {%s s} {%d x}!%!|}
+let () = fprintf_label ~ch:stdout {%i|Hello, World {%s s} {%d x}!{%c '\n'}%!|}
+
+let () = Format.kfprintf (fun fmt -> Format.fprintf fmt {%i|Hello, World {%s s} {%d x}|}) Format.std_formatter {%i|Hello, World {%s s} {%d x}!%!|}

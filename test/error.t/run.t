@@ -14,7 +14,7 @@
   $ dune exec ./main.exe
   File "main.ml", line 5, characters 44-51:
   Error: Syntax error in
-          let x 
+          let x
   [1]
   $ rm main.ml
   $ cp ocaml_syntax_error_2.ml main.ml

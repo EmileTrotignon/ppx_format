@@ -2,4 +2,5 @@
  (name main)
  (modules main)
  (preprocess (pps ppx_format))
+ (flags (:standard "-color" "never"))
 )
